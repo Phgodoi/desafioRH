@@ -1,0 +1,127 @@
+﻿@model IEnumerable<desafioRH.Models.Funcionario>
+@{
+    ViewData["Title"] = "Colaboradores";
+}
+
+    <h3>Colaboradores</h3>
+
+    <br />
+
+    <div class="form-row">
+            <a class="btn btn-primary" asp-action="Create">Adicionar colaborador</a>
+    </div>
+
+    <br />
+
+<table class="table caption-top table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col" class="text-center">Nome</th>
+            <th scope="col" class="text-center">Departamento</th>
+            <th scope="col" class="text-center">Data de admissão</th>
+            <th scope="col" class="text-center">Ramal</th>
+            <th scope="col" class="text-center">Email</th>
+
+
+            <td class="text-sm-end">Detalhes</td>
+            <td class="text-sm-end">editar</td>
+            <td class="text-sm-end">Excluir</td>
+        </tr>
+    </thead>
+    @if (Model.Any())
+    {
+        <tbody>
+            
+            @foreach (var dados in Model)
+            {
+                <tr class="text-center">
+                    <td class="text-center">
+                        @Html.DisplayFor(model => dados.Id)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(model => dados.Nome)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(model => dados.Departamento)
+                    </td>
+                    <td class="text-center">
+                        @(((DateTimeOffset)dados.DataAdmissao).ToString("dd/MM/yyyy"))
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(model => dados.Ramal)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(model => dados.EmailCorporativo)
+                    </td>
+
+
+
+                    <td class="text-sm-end">
+                        <a class="fas fa-tag btn"></a>
+                    </td>
+                    <td class="text-sm-end">
+                        <a href="#" class="fas fa-solid fa-pen btn editarBtn" data-value="@dados.Id"></a>
+
+                        @* <a class="fas fa-edit btn" asp-action="Edit" asp-route-id="@dados.Id"></a> *@
+
+
+                    </td>
+                    <td class="text-sm-end">
+                        <a class="far fa-trash-alt btn"></a>
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    }
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="conteudoModal"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    //Metodo Editar
+    $(document).ready(function () {
+        $(document).on("click", ".editarBtn", function (event) {
+            event.preventDefault();
+
+            var Id = $(this).data("value");
+            $("#conteudoModal").load("/Funcionarios/Edit/" + Id,
+                function () {
+                    $('#myModal').modal("show");                   
+                }
+            );
+        });
+        $(document).on("click", ".fecharBtn", function (event) {
+            event.preventDefault();
+            $('#myModal').modal('hide');
+              
+        });
+        $(document).on("click", ".saveBtn", function (event) {
+            event.preventDefault();
+
+            var Id = $(this).data("value");
+            console.log(Id);
+            $("#conteudoModal").load("/Funcionarios/Save/" + Id);
+        });
+    });
+
+</script>
+
+
+
+
