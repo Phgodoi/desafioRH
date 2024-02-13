@@ -1,6 +1,6 @@
 ﻿namespace desafioRH.Models
 {
-    public enum TipoAcao
+    public enum EnumTipoAcao
     {
         Admissao, 
         Alteracao, 

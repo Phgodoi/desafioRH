@@ -6,7 +6,7 @@ namespace desafioRH.Models
     {
         public FuncionarioLog() { }
 
-        public FuncionarioLog(Funcionario funcionario, TipoAcao? tipoAcao, string? jSON, DateTimeOffset? alteradoEm)
+        public FuncionarioLog(Funcionario funcionario, EnumTipoAcao? tipoAcao, string? jSON, DateTimeOffset? alteradoEm)
         {
             base.Id = funcionario.Id;
             base.Nome = funcionario.Nome;
@@ -26,7 +26,7 @@ namespace desafioRH.Models
         public int Id { get; set; } 
         public int Id_Funcionario { get; set; } 
        
-        public TipoAcao? TipoAcao { get; set; }
+        public EnumTipoAcao? TipoAcao { get; set; }
         public string? JSON { get; set; }
         public DateTimeOffset? AlteradoEm { get; set; }
     }

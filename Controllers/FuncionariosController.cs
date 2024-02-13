@@ -26,21 +26,20 @@ namespace desafioRH.Controllers
 
         public IActionResult Create()
         {
-
             return View();
         }
 
         [HttpPost, ActionName("Create")]
-        public IActionResult Create(Funcionario funcionario)
+        public IActionResult AddEmployee(Funcionario funcionario)
         {
             if (ModelState.IsValid)
             {
                 _context.Funcionarios.Add(funcionario);
                 _context.SaveChanges();
 
-                var funcionarioLog = new FuncionarioLog(funcionario, TipoAcao.Admissao, funcionario.Departamento, DateTimeOffset.Now);
-                funcionarioLog.TipoAcao = TipoAcao.Admissao;
-               _logContext.FuncionarioLogs.Add(funcionarioLog);
+                var funcionarioLog = new FuncionarioLog(funcionario, EnumTipoAcao.Admissao, funcionario.Departamento, DateTimeOffset.Now);
+                funcionarioLog.TipoAcao = EnumTipoAcao.Admissao;
+                _logContext.FuncionarioLogs.Add(funcionarioLog);
                 _logContext.SaveChanges();
 
                 return RedirectToAction(nameof(Index), new {id = funcionario.Id});
@@ -77,8 +76,8 @@ namespace desafioRH.Controllers
           
             _context.SaveChanges();
 
-            var funcionarioLog = new FuncionarioLog(funcionario, TipoAcao.Admissao, funcionario.Departamento, DateTimeOffset.Now);
-            funcionarioLog.TipoAcao = TipoAcao.Alteracao;
+            var funcionarioLog = new FuncionarioLog(funcionario, EnumTipoAcao.Alteracao, funcionario.Departamento, DateTimeOffset.Now);
+            funcionarioLog.TipoAcao = EnumTipoAcao.Alteracao;
             _logContext.FuncionarioLogs.Add(funcionarioLog);
             _logContext.SaveChanges();
 

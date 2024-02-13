@@ -7,8 +7,8 @@
 
     <br />
 
-    <div class="form-row">
-            <a class="btn btn-primary" asp-action="Create">Adicionar colaborador</a>
+    <div class="form-row"> 
+        <a href="#" class="btn btn-primary criarBtn">Adicionar colaborador</a>
     </div>
 
     <br />
@@ -62,10 +62,6 @@
                     </td>
                     <td class="text-sm-end">
                         <a href="#" class="fas fa-solid fa-pen btn editarBtn" data-value="@dados.Id"></a>
-
-                        @* <a class="fas fa-edit btn" asp-action="Edit" asp-route-id="@dados.Id"></a> *@
-
-
                     </td>
                     <td class="text-sm-end">
                         <a class="far fa-trash-alt btn"></a>
@@ -81,9 +77,13 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
+        <div class="modal-content col-10">
+            <div class="modal-header text-light bg-dark border-bottom box-shadow mb-3">
+                <h2 class="modal-title fs-3 " style="margin-left: 5%;" id="staticBackdropLabel"></h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
                 <div id="conteudoModal"></div>
             </div>
@@ -92,7 +92,38 @@
 </div>
 
 
+
+ 
+
+
 <script type="text/javascript">
+    //Metodo Criar
+    $(document).ready(function () {
+        $(document).on("click", ".criarBtn", function (event) {
+            event.preventDefault();
+            $("#conteudoModal").load("/Funcionarios/Create/",
+                function () {
+                    var tituloModal = "Cadastrar colaborador";
+                    $(".modal-title").text(tituloModal);
+
+                    $('#myModal').modal("show");
+                }
+            );
+        });
+        $(document).on("click", ".fecharBtn", function (event) {
+            event.preventDefault();
+            $('#myModal').modal('hide');
+
+        });
+        $(document).on("click", ".saveBtn", function (event) {
+            event.preventDefault();
+
+            var Id = $(this).data("value");
+            console.log(Id);
+            $("#conteudoModal").load("/Funcionarios/AddEmployee/");
+        });
+    });
+
 
     //Metodo Editar
     $(document).ready(function () {
@@ -102,6 +133,8 @@
             var Id = $(this).data("value");
             $("#conteudoModal").load("/Funcionarios/Edit/" + Id,
                 function () {
+                    var tituloModal = "Editar colaborador";
+                    $(".modal-title").text(tituloModal);
                     $('#myModal').modal("show");                   
                 }
             );
