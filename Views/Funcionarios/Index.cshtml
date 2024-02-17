@@ -14,23 +14,23 @@
     <br />
 
 <table class="table caption-top table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col" class="text-center">Nome</th>
-            <th scope="col" class="text-center">Departamento</th>
-            <th scope="col" class="text-center">Data de admissão</th>
-            <th scope="col" class="text-center">Ramal</th>
-            <th scope="col" class="text-center">Email</th>
-
-
-            <td class="text-sm-end">Detalhes</td>
-            <td class="text-sm-end">editar</td>
-            <td class="text-sm-end">Excluir</td>
-        </tr>
-    </thead>
     @if (Model.Any())
     {
+        <thead class="table-dark">
+            <tr class="text-uppercase">
+                <th scope="col">#</th>
+                <th scope="col" class="text-center">Nome</th>
+                <th scope="col" class="text-center">Departamento</th>
+                <th scope="col" class="text-center">Data de admissão</th>
+                <th scope="col" class="text-center">Ramal</th>
+                <th scope="col" class="text-center">Email</th>
+
+
+                <td class="text-sm-end">Detalhes</td>
+                <td class="text-sm-end">Editar</td>
+                <td class="text-sm-end">Excluir</td>
+            </tr>
+        </thead>
         <tbody>
             
             @foreach (var dados in Model)
@@ -58,19 +58,23 @@
 
 
                     <td class="text-sm-end">
-                        <a class="fas fa-tag btn"></a>
+                        <a href="#" class="fas fa-tag fa-pen btn detailBtn" data-value="@dados.Id"></a>
                     </td>
                     <td class="text-sm-end">
                         <a href="#" class="fas fa-solid fa-pen btn editarBtn" data-value="@dados.Id"></a>
                     </td>
                     <td class="text-sm-end">
-                        <a class="far fa-trash-alt btn"></a>
+                        <a href="#" class="far fa-trash-alt btn deleteBtn" data-name="@dados.Nome" data-value="@dados.Id"></a>
                     </td>
                 </tr>
             }
-
-
         </tbody>
+    }
+    else
+    {
+        <td class="text-center bg-light">
+                Sem dados para exibir!
+        </td>
     }
 </table>
 
@@ -81,7 +85,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content col-10">
             <div class="modal-header text-light bg-dark border-bottom box-shadow mb-3">
-                <h2 class="modal-title fs-3 " style="margin-left: 5%;" id="staticBackdropLabel"></h2>
+                <h2 class="modal-title fs-3 text-uppercase" style="margin-left: 5%;" id="staticBackdropLabel"></h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -91,9 +95,29 @@
     </div>
 </div>
 
+<div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content col-12">
+            <div class="modal-header bg-danger border-bottom box-shadow mb-3 text-light">
+                <h2 class="modal-title fs-3 text-uppercase" style="margin-left: 5%;" id="staticBackdropLabel" ></h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="row col-12">
+                <h4 style="margin-left: 5%;" id="staticBackdropLabel">
+                   Deseja Realmente deletar o colaborador - <span class="modal-name"></span> <br /> Essa ação pode ser irreversível?
+                </h4>
+            </div>
+            <div class="row col-12">
+                <div class="form-group col-10">
+                    <a href="#" class="btn btn-danger deletBtn button-P">Deletar</a>
 
+                    <a href="#" class="btn btn-secondary button-P fecharBtn">Fechar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
- 
 
 
 <script type="text/javascript">
@@ -148,8 +172,64 @@
             event.preventDefault();
 
             var Id = $(this).data("value");
-            console.log(Id);
             $("#conteudoModal").load("/Funcionarios/Save/" + Id);
+        });
+    });
+
+    //Metodo Detalhes
+    $(document).ready(function () {
+        $(document).on("click", ".detailBtn", function (event) {
+            event.preventDefault();
+
+            var Id = $(this).data("value");
+            $("#conteudoModal").load("/Funcionarios/Detail/" + Id,
+                function () {
+                    var tituloModal = "Detalhes colaborador";
+                    $(".modal-title").text(tituloModal);
+                    $('#myModal').modal("show");                   
+                }
+            );
+        });
+        $(document).on("click", ".fecharBtn", function (event) {
+            event.preventDefault();
+            $('#myModal').modal('hide');
+              
+        });
+     
+    });
+
+
+    //Metodo Deletar
+    $(document).ready(function () {
+        $(document).on("click", ".deleteBtn", function (event) {
+            event.preventDefault();
+
+            var Id = $(this).data("value");
+            var name = $(this).data("name");
+
+            $("#conteudoModal").load("/Funcionarios/Delete/" + Id,
+                function () {
+                    var tituloModal = "Deletar colaborador";
+                    var teste = name;
+                    $(".modal-title").text(tituloModal);
+                    $(".modal-name").text(teste);
+                    $('#deleteModal').modal("show");
+                }
+            );
+            $(document).on("click", ".fecharBtn", function (event) {
+                event.preventDefault();
+                $('#deleteModal').modal('hide');
+              
+            });
+
+            $(document).on("click", ".deletBtn", function (event) {
+                event.preventDefault();              
+
+                $("#conteudoModal").load("/Funcionarios/DeleteEmployee/" + Id);
+                $('#deleteModal').modal('hide');
+                window.location.reload();
+            });
+     
         });
     });
 

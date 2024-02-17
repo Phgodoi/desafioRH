@@ -85,6 +85,44 @@ namespace desafioRH.Controllers
            
         }
 
+        public IActionResult Detail(int Id)
+        {
+            var funcionario = _context.Funcionarios.Find(Id);
+
+            if (funcionario == null)
+                return RedirectToAction(nameof(Index));
+
+            return View(funcionario);
+        } 
+
+        public IActionResult Delete(int Id)
+        {
+            var funcionario = _context.Funcionarios.Find(Id);
+
+            if (funcionario == null)
+                return RedirectToAction(nameof(Index));
+
+            return View(funcionario);
+        }
+
+        public IActionResult DeleteEmployee(int Id)
+        {
+            var deletarFuncionario = _context.Funcionarios.Find(Id);
+
+            var funcionarioLog = new FuncionarioLog(deletarFuncionario, EnumTipoAcao.Demissao, deletarFuncionario.Departamento, DateTimeOffset.Now);
+            funcionarioLog.TipoAcao = EnumTipoAcao.Demissao;
+
+            _logContext.FuncionarioLogs.Add(funcionarioLog);
+            _logContext.SaveChanges();
+
+            _context.Remove(deletarFuncionario);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
 
     }
 }
