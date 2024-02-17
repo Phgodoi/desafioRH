@@ -1,1 +1,3 @@
 # desafioRH
+
+Este projeto foi desenvolvido como parte do desafio da DIO, com o objetivo de criar uma página para o setor de Recursos Humanos. Nesta plataforma, é possível realizar operações como inserir, alterar e excluir informações de funcionários. Uma regra de negócio essencial é a manutenção de um registro de logs, permitindo a consulta do histórico do funcionário.
